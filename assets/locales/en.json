@@ -6,7 +6,7 @@
   "email": "Email",
   "email_hint": "Enter your email",
   "email_required": "Email is required",
-  "email_invalid": "Invalid email",
+  "email_invalid": "Invalid email or Password",
   "password": "Password",
   "password_hint": "Enter your password",
   "password_required": "Password is required",
