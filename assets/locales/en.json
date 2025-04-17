@@ -160,7 +160,7 @@
   "saudiRegion": "Saudi Region",
   "industrySector": "Industry/Sector",
   "pricePointSar": "Price Point (SAR)",
-  "marketingBudgetSar": "Marketing Budget (SAR)",
+  "marketingBudgetSar": "Marketing Budget (SAR)/month",
   "projectedCustomerReach": "Projected Customer Reach",
   "estimatedConversionRate": "Estimated Conversion Rate (%)",
   "predict": "Predict",
