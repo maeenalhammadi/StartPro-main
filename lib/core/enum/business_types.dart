@@ -1,0 +1,5 @@
+
+enum BusinessType {
+  ECOMMERCE,
+  SHIPPING,
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80971133822",
+    "project_id": "smartpro-92d1b",
+    "storage_bucket": "smartpro-92d1b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80971133822:android:5ca77af3134aac3029b92f",
+        "android_client_info": {
+          "package_name": "com.example.strat_pro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJUUDaa5nFj8Wwt9LcxgS9z9qodmQ3lpY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
