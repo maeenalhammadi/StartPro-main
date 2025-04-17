@@ -87,7 +87,7 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
               }),
               _buildNumberField("Price Point (SAR)", pricePointController),
               _buildNumberField(
-                "Marketing Budget (SAR)",
+                "Marketing Budget (SAR)/month",
                 marketingBudgetController,
               ),
               _buildNumberField(
@@ -120,7 +120,7 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
               if (result != null) ...[
                 const SizedBox(height: 24),
                 Text(
-                  "Predicted Sales: $result SAR",
+                  "Predicted Sales: $result SAR / Month",
                   style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ],
@@ -198,7 +198,7 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
       "Saudi Region": selectedRegion!,
       "Industry/Sector": selectedIndustry!,
       "Price Point (SAR)": int.parse(pricePointController.text),
-      "Marketing Budget (SAR)": int.parse(marketingBudgetController.text),
+      "": int.parse(marketingBudgetController.text),
       "Projected Customer Reach": int.parse(projectedReachController.text),
       "Estimated Conversion Rate (%)": double.parse(
         conversionRateController.text,
