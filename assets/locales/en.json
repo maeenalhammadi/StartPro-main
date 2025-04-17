@@ -164,7 +164,24 @@
   "projectedCustomerReach": "Projected Customer Reach",
   "estimatedConversionRate": "Estimated Conversion Rate (%)",
   "predict": "Predict",
-  "predictedSales": "Predicted Sales"
+  "predictedSales": "Predicted Sales",
+
+
+
+
+  
+    "salesPrediction": "Sales Prediction",
+    "targetMarketSize": "Target Market Size",
+    "saudiRegion": "Saudi Region",
+    "industrySector": "Industry/Sector",
+    "pricePoint": "Price Point (SAR)",
+    "marketingBudget": "Marketing Budget (SAR)/month",
+    "projectedCustomerReach": "Projected Customer Reach/month",
+    "estimatedConversionRate": "Estimated Conversion Rate (%)",
+    "predictButton": "Predict",
+    "predictedSales": "Predicted Sales: {amount} SAR / Month"
+  
+  
 
 ,
   "access_the_color_code_from_your_clipboard": "Access the color code from your clipboard"

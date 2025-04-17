@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http show post;
 import 'package:start_pro/core/theme/palette.dart';
 
 class NameGeneratorScreen extends StatefulWidget {
@@ -136,20 +140,65 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
     );
   }
 
-  void _generateNames() {
+  Future<void> _generateNames() async {
     if (!_formKey.currentState!.validate()) return;
 
     final prompt = """
-Suggest 5–10 business names based on the following:
+Suggest 5 creative business names for the following:
 Product/Service: ${productController.text}
-Language: $selectedLanguage
-Style: $selectedStyle
-Keywords: ${keywordsController.text}
+Preferred Language: $selectedLanguage
+Desired Style: $selectedStyle
+Include these keywords: ${keywordsController.text}
+
+List the names in bullet points.
 """;
 
     setState(() {
-      result =
-          "• Example Name 1\n• Example Name 2\n• Example Name 3\n• Example Name 4";
+      result = "Generating names...";
     });
+
+    final apiKey = dotenv.env['OPENAI_API_KEY'];
+    print(dotenv.env['OPENAI_API_KEY']); // Should print the key
+    if (apiKey == null || apiKey.isEmpty) {
+      setState(() {
+        result = "API Key not found. Please check your .env file.";
+      });
+      return;
+    }
+    final uri = Uri.parse("https://api.openai.com/v1/chat/completions");
+
+    final response = await http.post(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiKey',
+      },
+      body: jsonEncode({
+        "model": "gpt-3.5-turbo",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a helpful branding assistant.",
+          },
+          {"role": "user", "content": prompt},
+        ],
+        "temperature": 0.8,
+        "max_tokens": 150,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      final content = json['choices'][0]['message']['content'];
+      setState(() {
+        result = content;
+      });
+    } else {
+      setState(() {
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        result = "Failed to generate names. Please try again.";
+      });
+    }
   }
 }

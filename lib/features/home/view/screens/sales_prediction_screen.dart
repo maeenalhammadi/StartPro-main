@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/services.dart'; // <-- مهم لمنع الأحرف
+import 'package:flutter/services.dart';
 import 'package:start_pro/core/theme/palette.dart';
 
 class SalesPredictionScreen extends StatefulWidget {
@@ -91,7 +91,7 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
                 marketingBudgetController,
               ),
               _buildNumberField(
-                "Projected Customer Reach",
+                "Projected Customer Reach/month",
                 projectedReachController,
               ),
               _buildNumberField(

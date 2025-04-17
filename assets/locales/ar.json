@@ -155,17 +155,21 @@
   "christmas": "كريسماس",
   "halloween": "هالوين",
   "copied_to_clipboard": "تم النسخ إلى الحافظة",
-  "salesPrediction": "توقع المبيعات",
-  "targetMarketSize": "حجم السوق المستهدف",
-  "saudiRegion": "المنطقة السعودية",
-  "industrySector": "القطاع / الصناعة",
-  "pricePointSar": "سعر المنتج (ر.س)",
-  "marketingBudgetSar": "ميزانية التسويق (ر.س)",
-  "projectedCustomerReach": "الوصول المتوقع للعملاء",
-  "estimatedConversionRate": "نسبة التحويل المتوقعة (%)",
-  "predict": "تنبأ",
-  "predictedSales": "المبيعات المتوقعة",
-  "access_the_color_code_from_your_clipboard": "الوصول إلى رمز اللون من الحافظة"
+ 
+  "access_the_color_code_from_your_clipboard": "الوصول إلى رمز اللون من الحافظة",
+  
+    "salesPrediction": "توقع المبيعات",
+    "targetMarketSize": "حجم السوق المستهدف",
+    "saudiRegion": "المنطقة السعودية",
+    "industrySector": "القطاع / الصناعة",
+    "pricePoint": "نقطة السعر (ر.س)",
+    "marketingBudget": "ميزانية التسويق (ر.س)/شهريًا",
+    "projectedCustomerReach": "عدد العملاء المتوقع شهريًا",
+    "estimatedConversionRate": "معدل التحويل المتوقع (%)",
+    "predictButton": "توقع",
+    "predictedSales": "المبيعات المتوقعة: {amount} ر.س / شهر"
+  
+  
 }
 
 
