@@ -60,9 +60,7 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
               children: [
                 FeatureHeader(
                   title: context.localeString('logo_generator'),
-                  description: context.localeString(
-                    'create_professional_logos_with_ai',
-                  ),
+                  description: context.localeString('create_professional_logos_with_ai'),
                   icon: Icons.image,
                   color: AppColors.kErrorColor,
                   tag: LogoGeneratorScreen.route,
@@ -73,21 +71,14 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
                   style: const TextStyle(color: AppColors.kTextColor),
                   decoration: InputDecoration(
                     labelText: context.localeString('business_name'),
-                    labelStyle: TextStyle(
-                      color: AppColors.kTextColor.withAlpha(700),
-                    ),
+                    labelStyle: TextStyle(color: AppColors.kTextColor.withAlpha(700)),
                     filled: true,
                     fillColor: AppColors.kSurfaceColorLight,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return context.localeString(
-                        'please_enter_your_business_name',
-                      );
+                      return context.localeString('please_enter_your_business_name');
                     }
                     return null;
                   },
@@ -100,16 +91,11 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
                         label: context.localeString('logo_style'),
                         value: _selectedStyle,
                         options: _styles,
-                        onChanged:
-                            (val) => setState(() => _selectedStyle = val),
+                        onChanged: (val) => setState(() => _selectedStyle = val),
                         hint: context.localeString('select_logo_style'),
-                        validator:
-                            (value) =>
-                                (value == null || value.isEmpty)
-                                    ? context.localeString(
-                                      'please_select_logo_style',
-                                    )
-                                    : null,
+                        validator: (value) => (value == null || value.isEmpty)
+                            ? context.localeString('please_select_logo_style')
+                            : null,
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -117,8 +103,7 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
                       child: ColorInput(
                         label: context.localeString('logo_color'),
                         value: _selectedColor,
-                        onChanged:
-                            (val) => setState(() => _selectedColor = val),
+                        onChanged: (val) => setState(() => _selectedColor = val),
                       ),
                     ),
                   ],
@@ -130,15 +115,10 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
                   style: const TextStyle(color: AppColors.kTextColor),
                   decoration: InputDecoration(
                     labelText: context.localeString('additional_description'),
-                    labelStyle: TextStyle(
-                      color: AppColors.kTextColor.withAlpha(700),
-                    ),
+                    labelStyle: TextStyle(color: AppColors.kTextColor.withAlpha(700)),
                     filled: true,
                     fillColor: AppColors.kSurfaceColorLight,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -183,8 +163,7 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
     final businessName = _businessNameController.text.trim();
     final description = _descriptionController.text.trim();
     final style = _selectedStyle ?? '';
-    final colorHex =
-        '#${_selectedColor?.value.toRadixString(16).substring(2) ?? '000000'}';
+    final colorHex = '#${_selectedColor?.value.toRadixString(16).substring(2) ?? '000000'}';
     final apiKey = dotenv.env['OPENAI_API_KEY'];
 
     final prompt = StringBuffer();
