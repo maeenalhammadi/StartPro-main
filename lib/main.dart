@@ -12,16 +12,12 @@ import 'package:start_pro/app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // تحميل ملفات البيئة (.env)
   await dotenv.load(fileName: '.env');
 
-  // تهيئة Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // تهيئة اللغات
   await Locales.init(['en', 'ar']);
 
-  // تشغيل التطبيق مع AdaptiveTheme و ProviderScope
   runApp(
     AdaptiveTheme(
       light: AppTheme.lightTheme,
