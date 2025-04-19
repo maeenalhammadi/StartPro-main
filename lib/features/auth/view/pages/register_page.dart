@@ -4,11 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:start_pro/core/constants/hero_tags.dart';
 import 'package:start_pro/core/widgets/logo.dart';
-import 'package:start_pro/features/auth/view/widgets/login_form.dart';
-import 'package:start_pro/features/auth/view/widgets/login_welcome.dart';
 import 'package:start_pro/features/auth/view/widgets/register_form.dart';
-import 'package:start_pro/features/auth/view/widgets/register_message.dart';
-import 'package:start_pro/features/auth/view/widgets/register_welcome.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});

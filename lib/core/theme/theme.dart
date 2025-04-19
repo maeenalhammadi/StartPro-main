@@ -49,8 +49,6 @@ class AppTheme {
       onSurface: AppColors.kTextColor,
       error: AppColors.kErrorColor,
       onError: AppColors.kTextColor,
-      background: AppColors.kBackgroundColor,
-      onBackground: AppColors.kTextColor,
     ),
     scaffoldBackgroundColor: AppColors.kBackgroundColor,
     cardColor: AppColors.kSurfaceColor,

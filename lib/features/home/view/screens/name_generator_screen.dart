@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http show post;
 import 'package:start_pro/core/theme/palette.dart';
+// <-- ✅ تأكد أنك مثبت الحزمة
+// <-- هذا السطر هو اللي يعرّف LaunchMode
 
 class NameGeneratorScreen extends StatefulWidget {
   static const route = '/name-generator';
@@ -50,13 +51,14 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
                 "Preferred Language",
                 languages,
                 selectedLanguage,
-                (val) {
-                  setState(() => selectedLanguage = val);
-                },
+                (val) => setState(() => selectedLanguage = val),
               ),
-              _buildDropdown("Desired Style", styles, selectedStyle, (val) {
-                setState(() => selectedStyle = val);
-              }),
+              _buildDropdown(
+                "Desired Style",
+                styles,
+                selectedStyle,
+                (val) => setState(() => selectedStyle = val),
+              ),
               _buildField(
                 "Any keywords or concepts to include?",
                 keywordsController,
@@ -83,6 +85,20 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
                 const SizedBox(height: 24),
                 Text(result!, style: const TextStyle(color: Colors.white)),
               ],
+
+              // // ✅ رابط وزارة التجارة
+              // const SizedBox(height: 24),
+              // TextButton(
+              //   onPressed:,
+              //   child: const Text(
+              //     'تحقق من توفر اسم نشاطك التجاري عبر وزارة التجارة',
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(
+              //       color: Colors.blueAccent,
+              //       decoration: TextDecoration.underline,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -103,10 +119,9 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
           labelStyle: const TextStyle(color: Colors.white),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         ),
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) return 'Required';
-          return null;
-        },
+        validator:
+            (value) =>
+                value == null || value.trim().isEmpty ? 'Required' : null,
       ),
     );
   }
@@ -158,13 +173,13 @@ List the names in bullet points.
     });
 
     final apiKey = dotenv.env['OPENAI_API_KEY'];
-    print(dotenv.env['OPENAI_API_KEY']); // Should print the key
     if (apiKey == null || apiKey.isEmpty) {
       setState(() {
         result = "API Key not found. Please check your .env file.";
       });
       return;
     }
+
     final uri = Uri.parse("https://api.openai.com/v1/chat/completions");
 
     final response = await http.post(
@@ -195,10 +210,18 @@ List the names in bullet points.
       });
     } else {
       setState(() {
-        print('Status Code: ${response.statusCode}');
-        print('Response Body: ${response.body}');
         result = "Failed to generate names. Please try again.";
       });
     }
   }
+
+  // ✅ فتح رابط وزارة التجارة
+  // Future<void> _launchMCLink() async {
+  //   final url = Uri.parse(
+  //     "https://mc.gov.sa/ar/eservices/Pages/ServiceDetails.aspx?sID=1",
+  //   );
+  //   if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 }

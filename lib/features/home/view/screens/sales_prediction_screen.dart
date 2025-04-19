@@ -7,6 +7,8 @@ import 'package:start_pro/core/theme/palette.dart';
 class SalesPredictionScreen extends StatefulWidget {
   static const route = '/sales-prediction';
 
+  const SalesPredictionScreen({super.key});
+
   @override
   State<SalesPredictionScreen> createState() => _SalesPredictionScreenState();
 }
@@ -148,8 +150,9 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
         ),
         validator: (value) {
           if (value == null || value.trim().isEmpty) return 'Required';
-          if (double.tryParse(value.trim()) == null)
+          if (double.tryParse(value.trim()) == null) {
             return 'Enter numbers only';
+          }
           return null;
         },
       ),

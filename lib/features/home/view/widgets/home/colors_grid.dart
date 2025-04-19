@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_locales/flutter_locales.dart';
-import 'package:start_pro/core/enum/toast_type.dart';
-import 'package:start_pro/core/utils/show_toast.dart';
 import 'package:start_pro/core/theme/palette.dart';
 
 class ColorsGrid extends StatelessWidget {

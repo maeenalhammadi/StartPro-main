@@ -25,7 +25,7 @@ class BusinessModel {
   }) {
     return BusinessModel(
       title: title ?? this.title,
-      typeLabel: type ?? this.typeLabel,
+      typeLabel: type ?? typeLabel,
       content: content ?? this.content,
       imageUrl: imageUrl ?? this.imageUrl,
       description: description ?? this.description,
