@@ -57,6 +57,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
       await ref
           .read(registerControllerProvider.notifier)
           .register(context, user);
+      return null;
     }
 
     return Form(

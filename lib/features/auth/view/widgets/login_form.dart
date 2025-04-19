@@ -45,6 +45,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             email: _emailController.text,
             password: _passwordController.text,
           );
+      return null;
     }
 
     return Form(

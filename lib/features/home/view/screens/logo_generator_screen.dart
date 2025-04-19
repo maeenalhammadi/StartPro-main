@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:http/http.dart' as http;
 import 'package:start_pro/core/theme/palette.dart';
 import 'package:start_pro/core/types/option.dart';
 import 'package:start_pro/core/widgets/form/color_input.dart';
@@ -26,12 +29,12 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
   Color? _selectedColor = Colors.black;
 
   final List<Option<String>> _styles = [
-    Option(value: 'minimalist', tag: 'Minimalist'),
-    Option(value: 'modern', tag: 'Modern'),
-    Option(value: 'classic', tag: 'Classic'),
-    Option(value: 'playful', tag: 'Playful'),
-    Option(value: 'elegant', tag: 'Elegant'),
-    Option(value: 'bold', tag: 'Bold'),
+    Option(value: 'Minimalist', tag: 'Minimalist'),
+    Option(value: 'Modern', tag: 'Modern'),
+    Option(value: 'Classic', tag: 'Classic'),
+    Option(value: 'Playful', tag: 'Playful'),
+    Option(value: 'Elegant', tag: 'Elegant'),
+    Option(value: 'Bold', tag: 'Bold'),
   ];
 
   @override
@@ -77,26 +80,10 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: const BorderSide(
                         color: AppColors.kPrimaryColor,
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: AppColors.kErrorColor,
-                      ),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: AppColors.kErrorColor,
                       ),
                     ),
                   ),
@@ -163,10 +150,6 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: const BorderSide(
@@ -181,6 +164,22 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
                   onPressed: _generateLogo,
                   isLoading: _isLoading,
                 ),
+                if (_generatedImageUrl != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(_generatedImageUrl!),
+                    ),
+                  ),
+                if (_error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(
+                      _error!,
+                      style: const TextStyle(color: AppColors.kErrorColor),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -190,9 +189,7 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
   }
 
   Future<void> _generateLogo() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
 
     setState(() {
       _isLoading = true;
@@ -200,6 +197,63 @@ class _LogoGeneratorScreenState extends State<LogoGeneratorScreen> {
       _generatedImageUrl = null;
     });
 
-    // TODO: Implement logo generation logic
+    final businessName = _businessNameController.text.trim();
+    final description = _descriptionController.text.trim();
+    final style = _selectedStyle ?? '';
+    final colorHex =
+        '#${_selectedColor?.value.toRadixString(16).substring(2) ?? '000000'}';
+    final apiKey = dotenv.env['OPENAI_API_KEY'];
+
+    final prompt = StringBuffer();
+    prompt.write('Design a $style logo for a business named "$businessName". ');
+    prompt.write('The logo should primarily use the color $colorHex. ');
+    if (description.isNotEmpty) {
+      prompt.write('Description: $description');
+    }
+
+    print('[LOG] Final prompt sent to OpenAI: ${prompt.toString()}');
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.openai.com/v1/images/generations'),
+        headers: {
+          'Authorization': 'Bearer $apiKey',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "model": "dall-e-3",
+          "prompt": prompt.toString(),
+          "n": 1,
+          "size": "1024x1024",
+          "quality": "standard",
+        }),
+      );
+
+      print('[LOG] Response status: ${response.statusCode}');
+      print('[LOG] Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final imageUrl = data['data'][0]['url'];
+
+        setState(() {
+          _generatedImageUrl = imageUrl;
+          _isLoading = false;
+        });
+
+        print('[LOG] Generated image URL: $imageUrl');
+      } else {
+        setState(() {
+          _error = 'Failed to generate logo. Try again.';
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('[ERROR] $e');
+      setState(() {
+        _error = 'An error occurred: $e';
+        _isLoading = false;
+      });
+    }
   }
 }
