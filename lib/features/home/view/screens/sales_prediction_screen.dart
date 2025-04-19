@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:start_pro/core/theme/palette.dart';
 
 class SalesPredictionScreen extends StatefulWidget {
@@ -27,6 +29,9 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
   String? selectedRegion;
   String? selectedIndustry;
   String? result;
+  String? revenue;
+  String? customerAcquisition;
+  String? roi;
 
   final List<String> regions = [
     "Madinah",
@@ -123,6 +128,19 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
                   "Predicted Sales: $result SAR / Month",
                   style: const TextStyle(fontSize: 18, color: Colors.white),
                 ),
+                const SizedBox(height: 12),
+                Text(
+                  "Revenue Estimate: $revenue SAR / Month",
+                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                Text(
+                  "Customer Acquisition Estimate: $customerAcquisition customers / Month",
+                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                Text(
+                  "ROI (Return on Investment): $roi%",
+                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                ),
               ],
             ],
           ),
@@ -193,16 +211,21 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final url = Uri.parse("http://10.0.2.2:5000/predict");
+
+    final int marketSize = int.parse(targetMarketSizeController.text);
+    final int price = int.parse(pricePointController.text);
+    final int marketing = int.parse(marketingBudgetController.text);
+    final int reach = int.parse(projectedReachController.text);
+    final double rate = double.parse(conversionRateController.text) / 100;
+
     final body = {
-      "Target Market Size": int.parse(targetMarketSizeController.text),
+      "Target Market Size": marketSize,
       "Saudi Region": selectedRegion!,
       "Industry/Sector": selectedIndustry!,
-      "Price Point (SAR)": int.parse(pricePointController.text),
-      "": int.parse(marketingBudgetController.text),
-      "Projected Customer Reach": int.parse(projectedReachController.text),
-      "Estimated Conversion Rate (%)": double.parse(
-        conversionRateController.text,
-      ),
+      "Price Point (SAR)": price,
+      "Marketing Budget (SAR)": marketing,
+      "Projected Customer Reach": reach,
+      "Estimated Conversion Rate (%)": rate * 100,
     };
 
     try {
@@ -214,10 +237,44 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        final double predictedSales = double.parse(
+          data["predicted_sales"].toString(),
+        );
+
+        final double calculatedRevenue = price * predictedSales;
+        final double calculatedCustomers = reach * rate;
+        final double profit = predictedSales - marketing;
+        final double calculatedROI =
+            marketing == 0 ? 0 : (profit / marketing) * 100;
+
+        // Get user info
+        final user = FirebaseAuth.instance.currentUser;
+        final userEmail = user?.email ?? "unknown";
+        final userId = user?.uid ?? "unknown";
+
+        // Save to Firestore
+        await FirebaseFirestore.instance.collection("sales_predictions").add({
+          "userId": userId,
+          "email": userEmail,
+          "region": selectedRegion,
+          "industry": selectedIndustry,
+          "marketSize": marketSize,
+          "pricePoint": price,
+          "marketingBudget": marketing,
+          "reach": reach,
+          "conversionRate": rate * 100,
+          "predictedSales": predictedSales,
+          "calculatedRevenue": calculatedRevenue,
+          "customerAcquisition": calculatedCustomers,
+          "roi": calculatedROI,
+          "timestamp": FieldValue.serverTimestamp(),
+        });
+
         setState(() {
-          result = double.parse(
-            data["predicted_sales"].toString(),
-          ).toStringAsFixed(2);
+          result = predictedSales.toStringAsFixed(2);
+          revenue = calculatedRevenue.toStringAsFixed(2);
+          customerAcquisition = calculatedCustomers.toStringAsFixed(0);
+          roi = calculatedROI.toStringAsFixed(2);
         });
       } else {
         setState(() => result = "Error: ${response.statusCode}");

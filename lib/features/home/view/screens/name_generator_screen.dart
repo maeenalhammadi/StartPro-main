@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http show post;
@@ -158,13 +160,13 @@ List the names in bullet points.
     });
 
     final apiKey = dotenv.env['OPENAI_API_KEY'];
-    print(dotenv.env['OPENAI_API_KEY']); // Should print the key
     if (apiKey == null || apiKey.isEmpty) {
       setState(() {
         result = "API Key not found. Please check your .env file.";
       });
       return;
     }
+
     final uri = Uri.parse("https://api.openai.com/v1/chat/completions");
 
     final response = await http.post(
@@ -190,9 +192,28 @@ List the names in bullet points.
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final content = json['choices'][0]['message']['content'];
+
       setState(() {
         result = content;
       });
+
+      try {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await FirebaseFirestore.instance.collection('name_generator').add({
+            'userId': user.uid,
+            'email': user.email,
+            'productOrService': productController.text.trim(),
+            'language': selectedLanguage,
+            'style': selectedStyle,
+            'keywords': keywordsController.text.trim(),
+            'generatedNames': content,
+            'timestamp': FieldValue.serverTimestamp(),
+          });
+        }
+      } catch (e) {
+        print('Firestore Error: $e');
+      }
     } else {
       setState(() {
         print('Status Code: ${response.statusCode}');

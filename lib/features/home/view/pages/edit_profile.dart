@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:start_pro/core/providers/user_provider.dart';
 import 'package:start_pro/core/theme/palette.dart';
 import 'package:start_pro/core/widgets/loading_button.dart';
@@ -17,27 +19,40 @@ class EditProfilePage extends ConsumerStatefulWidget {
 
 class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _nameController;
+  late final TextEditingController _firstNameController;
+  late final TextEditingController _lastNameController;
   late final TextEditingController _emailController;
+
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
     _emailController = TextEditingController();
+    _loadUserData();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final user = ref.watch(userProvider);
-    _nameController.text = user.displayName ?? '';
-    _emailController.text = user.email ?? '';
+  Future<void> _loadUserData() async {
+    final user = ref.read(userProvider);
+    final userId = user.uid;
+
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final data = doc.data();
+
+    if (data != null) {
+      _firstNameController.text = data['firstName'] ?? '';
+      _lastNameController.text = data['lastName'] ?? '';
+      _emailController.text = data['email'] ?? '';
+    }
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _emailController.dispose();
     super.dispose();
   }
@@ -53,29 +68,32 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Profile Image Section
               Center(
                 child: Stack(
                   children: [
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: AppColors.kPrimaryColor,
-                      child: Icon(Icons.person, size: 50, color: Colors.white),
+                      child: const Icon(
+                        Icons.person,
+                        size: 50,
+                        color: Colors.white,
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
                       right: 0,
                       child: Container(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           color: AppColors.kPrimaryColor,
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.camera_alt,
                           size: 20,
                           color: Colors.white,
@@ -86,10 +104,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                 ),
               ),
               Gap(24.h),
-
-              // Name Field
               TextFormField(
-                controller: _nameController,
+                controller: _firstNameController,
                 decoration: InputDecoration(
                   labelText: Locales.string(context, 'name'),
                   prefixIcon: const Icon(Icons.person_outline),
@@ -109,7 +125,21 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                 },
               ),
               Gap(16.h),
-
+              TextFormField(
+                controller: _lastNameController,
+                decoration: InputDecoration(
+                  labelText: 'Last Name',
+                  prefixIcon: const Icon(Icons.person_2_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: AppColors.kPrimaryColor),
+                  ),
+                ),
+              ),
+              Gap(16.h),
               TextFormField(
                 enabled: false,
                 controller: _emailController,
@@ -125,31 +155,47 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                     borderSide: BorderSide(color: AppColors.kPrimaryColor),
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return Locales.string(context, 'email_required');
-                  }
-                  return null;
-                },
               ),
-              Gap(16.h),
-
               Gap(24.h),
-
-              // Save Button
               LoadingButton(
                 text: Locales.string(context, 'save'),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // TODO: Save the data
-                  }
-                },
-                isLoading: false,
+                isLoading: _isLoading,
+                onPressed: _saveProfile,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _saveProfile() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final user = ref.read(userProvider);
+    final userId = user.uid;
+
+    setState(() => _isLoading = true);
+
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim(),
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile updated successfully')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 }

@@ -31,7 +31,7 @@ class AppearanceButtons extends StatelessWidget {
               ),
 
               // TODO: Next Release
-              onPressed: false ? onThemeToggle : null,
+             onPressed: onThemeToggle,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.kAccentPurple,
                 padding: const EdgeInsets.symmetric(vertical: 12),
