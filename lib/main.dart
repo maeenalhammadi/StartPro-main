@@ -16,9 +16,7 @@ void main() async {
   await dotenv.load(fileName: '.env');
 
   // تهيئة Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // تهيئة اللغات
   await Locales.init(['en', 'ar']);
@@ -29,12 +27,9 @@ void main() async {
       light: AppTheme.lightTheme,
       dark: AppTheme.darkTheme,
       initial: AdaptiveThemeMode.dark,
-      builder: (theme, darkTheme) => ProviderScope(
-        child: MyApp(
-          theme: theme,
-          darkTheme: darkTheme,
-        ),
-      ),
+      builder:
+          (theme, darkTheme) =>
+              ProviderScope(child: MyApp(theme: theme, darkTheme: darkTheme)),
     ),
   );
 }
