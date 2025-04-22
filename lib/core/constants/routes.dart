@@ -7,7 +7,8 @@ import 'package:start_pro/features/home/view/pages/edit_profile.dart';
 import 'package:start_pro/features/home/view/screens/logo_generator_screen.dart';
 import 'package:start_pro/features/home/view/screens/colors_screen.dart';
 import 'package:start_pro/features/home/view/screens/sales_prediction_screen.dart';
-import 'package:start_pro/features/home/view/screens/name_generator_screen.dart'; // ✅ أضفنا الاستيراد
+import 'package:start_pro/features/home/view/screens/name_generator_screen.dart';
+import 'package:start_pro/features/home/view/screens/trend_analysis_screen.dart'; // ✅ Added
 
 Map<String, Widget Function(BuildContext)> routes = {
   RouterPage.route: (context) => const RouterPage(),
@@ -18,6 +19,7 @@ Map<String, Widget Function(BuildContext)> routes = {
   LogoGeneratorScreen.route: (context) => const LogoGeneratorScreen(),
   ColorsScreen.route: (context) => const ColorsScreen(),
   SalesPredictionScreen.route: (context) => SalesPredictionScreen(),
-  NameGeneratorScreen.route:
-      (context) => const NameGeneratorScreen(), // ✅ هنا الإضافة
+  NameGeneratorScreen.route: (context) => const NameGeneratorScreen(),
+  TrendAnalysisScreen.route:
+      (context) => const TrendAnalysisScreen(), // ✅ Route registered
 };

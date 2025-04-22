@@ -6,16 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:start_pro/core/constants/routes.dart';
 import 'package:start_pro/core/theme/theme.dart';
 import 'package:start_pro/features/router/view/pages/router_page.dart';
+import 'package:start_pro/features/home/view/screens/saudi_regulations_screen.dart'; // ✅ Added
+import 'package:start_pro/features/home/view/screens/trend_analysis_screen.dart';
 
 class MyApp extends StatelessWidget {
   final ThemeData theme;
   final ThemeData darkTheme;
 
-  const MyApp({
-    super.key,
-    required this.theme,
-    required this.darkTheme,
-  });
+  const MyApp({super.key, required this.theme, required this.darkTheme});
 
   @override
   Widget build(BuildContext context) {
@@ -23,19 +21,28 @@ class MyApp extends StatelessWidget {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, child) => LocaleBuilder(
-        builder: (locale) => MaterialApp(
-          title: 'StartPro',
-          debugShowCheckedModeBanner: false,
-          routes: routes,
-          initialRoute: RouterPage.route,
-          localizationsDelegates: Locales.delegates,
-          supportedLocales: Locales.supportedLocales,
-          locale: locale,
-          theme: theme,
-          darkTheme: darkTheme,
-        ),
-      ),
+      builder:
+          (_, child) => LocaleBuilder(
+            builder:
+                (locale) => MaterialApp(
+                  title: 'StartPro',
+                  debugShowCheckedModeBanner: false,
+                  initialRoute: RouterPage.route,
+                  routes: {
+                    ...routes,
+                    SaudiRegulationsScreen.route:
+                        (context) => const SaudiRegulationsScreen(),
+                    TrendAnalysisScreen.route:
+                        (context) =>
+                            const TrendAnalysisScreen(), // ✅ Registered
+                  },
+                  localizationsDelegates: Locales.delegates,
+                  supportedLocales: Locales.supportedLocales,
+                  locale: locale,
+                  theme: theme,
+                  darkTheme: darkTheme,
+                ),
+          ),
     );
   }
 }

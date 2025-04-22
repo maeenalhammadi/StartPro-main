@@ -165,11 +165,6 @@
   "estimatedConversionRate": "Estimated Conversion Rate (%)",
   "predict": "Predict",
   "predictedSales": "Predicted Sales",
-
-
-
-
-  
     "salesPrediction": "Sales Prediction",
     "targetMarketSize": "Target Market Size",
     "saudiRegion": "Saudi Region",
@@ -179,11 +174,9 @@
     "projectedCustomerReach": "Projected Customer Reach/month",
     "estimatedConversionRate": "Estimated Conversion Rate (%)",
     "predictButton": "Predict",
-    "predictedSales": "Predicted Sales: {amount} SAR / Month"
-  
-  
-
-,
-  "access_the_color_code_from_your_clipboard": "Access the color code from your clipboard"
+    "predictedSales": "Predicted Sales: {amount} SAR / Month",
+  "access_the_color_code_from_your_clipboard": "Access the color code from your clipboard",
+  "trend_analysis": "Trend Analysis",
+  "analyze_business_trends_by_sector": "Analyze business trends by sector"
 }
 

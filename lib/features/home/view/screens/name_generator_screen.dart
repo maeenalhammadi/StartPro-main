@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http show post;
 import 'package:start_pro/core/theme/palette.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NameGeneratorScreen extends StatefulWidget {
   static const route = '/name-generator';
@@ -81,6 +82,22 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
                   ),
                 ),
               ),
+
+              // ✅ Clickable Link to Reserve Trade Name
+              const SizedBox(height: 12),
+              Center(
+                child: GestureDetector(
+                  onTap: _launchUrl,
+                  child: const Text(
+                    "Click here to reserve a trade name",
+                    style: TextStyle(
+                      color: Colors.lightBlueAccent,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
+
               if (result != null) ...[
                 const SizedBox(height: 24),
                 Text(result!, style: const TextStyle(color: Colors.white)),
@@ -90,6 +107,16 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
         ),
       ),
     );
+  }
+
+  // ✅ Helper method to open external link
+  Future<void> _launchUrl() async {
+    final Uri url = Uri.parse(
+      "https://mc.gov.sa/ar/eservices/Pages/ServiceDetails.aspx?sID=1",
+    );
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   Widget _buildField(String label, TextEditingController controller) {

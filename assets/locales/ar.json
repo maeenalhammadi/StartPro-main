@@ -167,9 +167,10 @@
     "projectedCustomerReach": "عدد العملاء المتوقع شهريًا",
     "estimatedConversionRate": "معدل التحويل المتوقع (%)",
     "predictButton": "توقع",
-    "predictedSales": "المبيعات المتوقعة: {amount} ر.س / شهر"
-  
-  
+    "predictedSales": "المبيعات المتوقعة: {amount} ر.س / شهر",
+     "trend_analysis": "تحليل الاتجاهات",
+     "analyze_business_trends_by_sector": "تحليل اتجاهات الأعمال حسب القطاع"
+
 }
 
 

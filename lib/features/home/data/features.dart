@@ -3,8 +3,9 @@ import 'package:start_pro/features/home/models/feature_model.dart';
 import 'package:start_pro/features/home/view/screens/colors_screen.dart';
 import 'package:start_pro/features/home/view/screens/logo_generator_screen.dart';
 import 'package:start_pro/features/home/view/screens/sales_prediction_screen.dart';
-import 'package:start_pro/features/home/view/screens/name_generator_screen.dart'; // 👈 Make sure this is imported
-
+import 'package:start_pro/features/home/view/screens/name_generator_screen.dart';
+import 'package:start_pro/features/home/view/screens/saudi_regulations_screen.dart'; // 👈 Make sure this is imported
+import 'package:start_pro/features/home/view/screens/trend_analysis_screen.dart';
 class FeatureSection {
   final String label;
   final List<FeatureItem> items;
@@ -40,18 +41,14 @@ class HomeFeatures {
     FeatureSection(
       label: 'business_tools',
       items: [
-        FeatureItem(
-          label: 'trademark_checker',
-          icon: Icons.verified_user_outlined,
-          description: 'check_trademark_availability_instantly',
-          path: '/trademark-checker',
-        ),
-        FeatureItem(
-          label: 'trend_analysis',
-          icon: Icons.trending_up,
-          description: 'analyze_market_trends_and_insights',
-          path: '/trend-analysis',
-        ),
+ FeatureItem(
+  label: 'trend_analysis',
+  icon: Icons.analytics_outlined,
+  description: 'analyze_business_trends_by_sector',
+  path: TrendAnalysisScreen.route,
+),
+
+
         FeatureItem(
           label: 'sales_prediction',
           icon: Icons.trending_up,
@@ -67,8 +64,9 @@ class HomeFeatures {
           label: 'saudi_laws',
           icon: Icons.gavel_outlined,
           description: 'access_saudi_business_regulations',
-          path: '/saudi-laws',
+          path: SaudiRegulationsScreen.route, // ✅ updated to use static route
         ),
+
         FeatureItem(
           label: 'user_manual',
           icon: Icons.menu_book_outlined,
@@ -79,4 +77,3 @@ class HomeFeatures {
     ),
   ];
 }
-
