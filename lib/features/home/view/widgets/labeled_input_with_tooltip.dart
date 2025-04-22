@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LabeledInputWithTooltip extends StatelessWidget {
   final TextEditingController controller;
@@ -35,7 +36,7 @@ class LabeledInputWithTooltip extends StatelessWidget {
                 const SizedBox(width: 6),
                 Tooltip(
                   message: tooltip!,
-                  child: Icon(Icons.info_outline, color: Colors.grey[400], size: 18),
+                  child: const Icon(Icons.info_outline, color: Colors.grey, size: 18),
                 ),
               ],
             ],
@@ -45,17 +46,23 @@ class LabeledInputWithTooltip extends StatelessWidget {
             controller: controller,
             keyboardType: keyboardType,
             style: const TextStyle(color: Colors.white),
+            inputFormatters: keyboardType == TextInputType.number
+                ? [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))]
+                : [],
             decoration: InputDecoration(
               filled: true,
-              fillColor: Color(0xFF1E1E2C),
+              fillColor: const Color(0xFF1E1E2C),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             ),
             validator: (value) {
               if (value == null || value.trim().isEmpty) return 'Required';
-              if (double.tryParse(value.trim()) == null)
+              if (keyboardType == TextInputType.number &&
+                  double.tryParse(value.trim()) == null) {
                 return 'Enter numbers only';
+              }
               return null;
             },
           ),

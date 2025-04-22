@@ -45,19 +45,31 @@ class LabeledDropdownWithTooltip extends StatelessWidget {
           const SizedBox(height: 6),
           DropdownButtonFormField<String>(
             value: selectedValue,
-            dropdownColor: Color(0xFF1E1E2C),
+            dropdownColor: const Color(0xFF1E1E2C),
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               filled: true,
-              fillColor: Color(0xFF1E1E2C),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+              fillColor: const Color(0xFF1E1E2C),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
-            items: items.map((e) => DropdownMenuItem(
-              value: e,
-              child: Text(e, style: const TextStyle(color: Colors.white)),
-            )).toList(),
+            items: items.map((e) {
+              return DropdownMenuItem<String>(
+                value: e,
+                child: Text(
+                  e,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              );
+            }).toList(),
             onChanged: onChanged,
-            validator: (value) => value == null ? 'Please select $label' : null,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please select $label';
+              }
+              return null;
+            },
           ),
         ],
       ),

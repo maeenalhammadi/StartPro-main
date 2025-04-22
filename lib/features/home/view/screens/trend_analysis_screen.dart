@@ -17,26 +17,26 @@ class _TrendAnalysisScreenState extends State<TrendAnalysisScreen> {
   String? selectedCategory;
 
   final Map<String, List<String>> categoryImages = {
-    'Energy': ['assets/images/energy1.png', 'assets/images/energy2.png'],
-    'Health care': ['assets/images/health1.png', 'assets/images/health2.png'],
-    'Real Estate': [
+    'energy': ['assets/images/energy1.png', 'assets/images/energy2.png'],
+    'health_care': ['assets/images/health1.png', 'assets/images/health2.png'],
+    'real_estate': [
       'assets/images/realestate1.png',
       'assets/images/realestate2.png',
     ],
-    'Food': ['assets/images/food1.png', 'assets/images/food2.png'],
-    'Beverages': [
+    'food': ['assets/images/food1.png', 'assets/images/food2.png'],
+    'beverages': [
       'assets/images/beverages1.png',
       'assets/images/beverages2.png',
     ],
-    'Transportation': [
+    'transportation': [
       'assets/images/transport1.png',
       'assets/images/transport2.png',
     ],
-    'Education': [
+    'education': [
       'assets/images/education1.png',
       'assets/images/education2.png',
     ],
-    'Art': ['assets/images/art1.png', 'assets/images/art2.png'],
+    'art': ['assets/images/art1.png', 'assets/images/art2.png'],
   };
 
   @override
@@ -44,7 +44,7 @@ class _TrendAnalysisScreenState extends State<TrendAnalysisScreen> {
     return Scaffold(
       backgroundColor: AppColors.kBackgroundColor,
       appBar: AppBar(
-        title: LocaleText('trendAnalysis'),
+        title: Text(context.localeString('trend_analysis')),
         backgroundColor: AppColors.kPrimaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -54,7 +54,7 @@ class _TrendAnalysisScreenState extends State<TrendAnalysisScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Choose a sector',
+              context.localeString('choose_sector'),
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -65,7 +65,7 @@ class _TrendAnalysisScreenState extends State<TrendAnalysisScreen> {
             Expanded(
               child: ListView(
                 children: [
-                  ...categoryImages.keys.map((category) {
+                  ...categoryImages.keys.map((key) {
                     return Padding(
                       padding: EdgeInsets.only(bottom: 12.h),
                       child: ElevatedButton(
@@ -81,11 +81,11 @@ class _TrendAnalysisScreenState extends State<TrendAnalysisScreen> {
                         ),
                         onPressed: () {
                           setState(() {
-                            selectedCategory = category;
+                            selectedCategory = key;
                           });
                         },
                         child: Text(
-                          category,
+                          context.localeString(key),
                           style: TextStyle(
                             fontSize: 15.sp,
                             color: Colors.white,
@@ -102,15 +102,14 @@ class _TrendAnalysisScreenState extends State<TrendAnalysisScreen> {
                       radius: Radius.circular(8.r),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children:
-                            categoryImages[selectedCategory!]!
-                                .map(
-                                  (imagePath) => Padding(
-                                    padding: EdgeInsets.only(bottom: 16.h),
-                                    child: Image.asset(imagePath),
-                                  ),
-                                )
-                                .toList(),
+                        children: categoryImages[selectedCategory!]!
+                            .map(
+                              (imagePath) => Padding(
+                                padding: EdgeInsets.only(bottom: 16.h),
+                                child: Image.asset(imagePath),
+                              ),
+                            )
+                            .toList(),
                       ),
                     ),
                   ],

@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http show post;
 import 'package:start_pro/core/theme/palette.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
 class NameGeneratorScreen extends StatefulWidget {
   static const route = '/name-generator';
@@ -37,7 +38,7 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.kSurfaceColor,
         elevation: 0,
-        title: const Text("Name Generator"),
+        title: Text(context.localeString("name_generator")),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -46,22 +47,27 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
           child: ListView(
             children: [
               _buildField(
-                "What product or service does the business offer?",
+                context.localeString("business_offer"),
                 productController,
               ),
               _buildDropdown(
-                "Preferred Language",
+                context.localeString("preferred_language"),
                 languages,
                 selectedLanguage,
                 (val) {
                   setState(() => selectedLanguage = val);
                 },
               ),
-              _buildDropdown("Desired Style", styles, selectedStyle, (val) {
-                setState(() => selectedStyle = val);
-              }),
+              _buildDropdown(
+                context.localeString("desired_style"),
+                styles,
+                selectedStyle,
+                (val) {
+                  setState(() => selectedStyle = val);
+                },
+              ),
               _buildField(
-                "Any keywords or concepts to include?",
+                context.localeString("keywords_concepts"),
                 keywordsController,
               ),
               const SizedBox(height: 20),
@@ -74,30 +80,27 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text(
-                  "Generate Names",
-                  style: TextStyle(
+                child: Text(
+                  context.localeString("generate_names"),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-
-              // ✅ Clickable Link to Reserve Trade Name
               const SizedBox(height: 12),
               Center(
                 child: GestureDetector(
                   onTap: _launchUrl,
-                  child: const Text(
-                    "Click here to reserve a trade name",
-                    style: TextStyle(
+                  child: Text(
+                    context.localeString("reserve_trade_name"),
+                    style: const TextStyle(
                       color: Colors.lightBlueAccent,
                       decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
               ),
-
               if (result != null) ...[
                 const SizedBox(height: 24),
                 Text(result!, style: const TextStyle(color: Colors.white)),
@@ -109,7 +112,6 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
     );
   }
 
-  // ✅ Helper method to open external link
   Future<void> _launchUrl() async {
     final Uri url = Uri.parse(
       "https://mc.gov.sa/ar/eservices/Pages/ServiceDetails.aspx?sID=1",
@@ -158,10 +160,7 @@ class _NameGeneratorScreenState extends State<NameGeneratorScreen> {
           labelStyle: const TextStyle(color: Colors.white),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         ),
-        items:
-            items
-                .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                .toList(),
+        items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
         onChanged: onChanged,
         style: const TextStyle(color: Colors.white),
         validator: (value) => value == null ? 'Required' : null,
@@ -205,10 +204,7 @@ List the names in bullet points.
       body: jsonEncode({
         "model": "gpt-3.5-turbo",
         "messages": [
-          {
-            "role": "system",
-            "content": "You are a helpful branding assistant.",
-          },
+          {"role": "system", "content": "You are a helpful branding assistant."},
           {"role": "user", "content": prompt},
         ],
         "temperature": 0.8,

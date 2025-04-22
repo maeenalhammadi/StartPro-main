@@ -1,3 +1,4 @@
+// 📄 File: sales_prediction_screen.dart
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:start_pro/core/theme/palette.dart';
 import '../widgets/labeled_input_with_tooltip.dart';
 import '../widgets/labeled_dropdown_with_tooltip.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 
 class SalesPredictionScreen extends StatefulWidget {
   static const route = '/sales-prediction';
@@ -18,13 +20,10 @@ class SalesPredictionScreen extends StatefulWidget {
 class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController targetMarketSizeController =
-      TextEditingController();
+  final TextEditingController targetMarketSizeController = TextEditingController();
   final TextEditingController pricePointController = TextEditingController();
-  final TextEditingController marketingBudgetController =
-      TextEditingController();
-  final TextEditingController projectedReachController =
-      TextEditingController();
+  final TextEditingController marketingBudgetController = TextEditingController();
+  final TextEditingController projectedReachController = TextEditingController();
 
   String? selectedRegion;
   String? selectedIndustry;
@@ -34,34 +33,15 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
   String? customerAcquisition;
   String? roi;
 
-  final List<String> regions = [
-    "Madinah",
-    "Makkah",
-    "Al Jouf",
-    "Hail",
-    "Al Baha",
-    "Eastern Province",
-    "Qassim",
-    "Najran",
-    "Asir",
-    "Northern Borders",
-    "Jazan",
-    "Tabuk",
-    "Riyadh",
+  final List<String> regionKeys = [
+    "madinah", "makkah", "al_jouf", "hail", "al_baha", "eastern_province",
+    "qassim", "najran", "asir", "northern_borders", "jazan", "tabuk", "riyadh"
   ];
 
-  final List<String> industries = [
-    "Finance & FinTech",
-    "Tourism & Hospitality",
-    "Technology & Software",
-    "Real Estate",
-    "Food & Beverage",
-    "Creative & Design",
-    "Health & Wellness",
-    "Education",
-    "Gaming & Esports",
-    "Transportation",
-    "E-commerce & Retail",
+  final List<String> industryKeys = [
+    "finance_and_fintech", "tourism_and_hospitality", "technology_and_software", "real_estate",
+    "food_and_beverage", "creative_and_design", "health_and_wellness", "education",
+    "gaming_and_esports", "transportation", "ecommerce_and_retail"
   ];
 
   final List<String> conversionRates = ["1", "2", "3", "4", "5"];
@@ -71,7 +51,7 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
     return Scaffold(
       backgroundColor: AppColors.kBackgroundColor,
       appBar: AppBar(
-        title: const Text("Sales Prediction"),
+        title: LocaleText("sales_prediction"),
         backgroundColor: AppColors.kSurfaceColor,
         elevation: 0,
       ),
@@ -83,55 +63,49 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
             children: [
               LabeledInputWithTooltip(
                 controller: targetMarketSizeController,
-                label: 'Target Market Size',
-                tooltip:
-                    'Estimated number of people who could be interested in your product.',
+                label: context.localeString("target_market_size"),
+                tooltip: context.localeString("target_market_size_tooltip"),
                 keyboardType: TextInputType.number,
               ),
               LabeledDropdownWithTooltip(
-                label: 'Saudi Region',
-                tooltip: 'Choose the region your business will target.',
-                items: regions,
+                label: context.localeString("saudi_region"),
+                tooltip: context.localeString("saudi_region_tooltip"),
+                items: regionKeys.map((key) => context.localeString(key)).toList(),
                 selectedValue: selectedRegion,
                 onChanged: (val) => setState(() => selectedRegion = val),
               ),
               LabeledDropdownWithTooltip(
-                label: 'Industry/Sector',
-                tooltip: 'Select the field your business operates in.',
-                items: industries,
+                label: context.localeString("industry_sector"),
+                tooltip: context.localeString("industry_sector_tooltip"),
+                items: industryKeys.map((key) => context.localeString(key)).toList(),
                 selectedValue: selectedIndustry,
                 onChanged: (val) => setState(() => selectedIndustry = val),
               ),
               LabeledInputWithTooltip(
                 controller: pricePointController,
-                label: 'Price Point (SAR)',
-                tooltip: 'Price of one product or service unit.',
+                label: context.localeString("price_point_sar"),
+                tooltip: context.localeString("price_point_sar_tooltip"),
                 keyboardType: TextInputType.number,
               ),
               LabeledInputWithTooltip(
                 controller: marketingBudgetController,
-                label: 'Marketing Budget (SAR)/month',
-                tooltip: 'How much you plan to spend on marketing each month.',
+                label: context.localeString("marketing_budget_sar_per_month"),
+                tooltip: context.localeString("marketing_budget_sar_per_month_tooltip"),
                 keyboardType: TextInputType.number,
               ),
               LabeledInputWithTooltip(
                 controller: projectedReachController,
-                label: 'Projected Customer Reach/month',
-                tooltip:
-                    'Estimated number of people your marketing could reach monthly.',
+                label: context.localeString("projected_customer_reach_per_month"),
+                tooltip: context.localeString("projected_customer_reach_per_month_tooltip"),
                 keyboardType: TextInputType.number,
               ),
-
               LabeledDropdownWithTooltip(
-                label: 'Estimated Conversion Rate (%)',
-                tooltip:
-                    'For new businesses, this rate is typically between 1% to 3%.',
-                items: conversionRates,
+                label: context.localeString("estimated_conversion_rate"),
+                tooltip: context.localeString("estimated_conversion_rate_tooltip"),
+                items: conversionRates.map((rate) => "$rate%").toList(),
                 selectedValue: selectedConversionRate,
-                onChanged:
-                    (val) => setState(() => selectedConversionRate = val),
+                onChanged: (val) => setState(() => selectedConversionRate = val),
               ),
-
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _predictSales,
@@ -142,16 +116,15 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text(
-                  "Predict",
-                  style: TextStyle(
+                child: Text(
+                  context.localeString("predict"),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-
               if (result != null) ...[
                 const SizedBox(height: 24),
                 Container(
@@ -172,36 +145,23 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "📈 Predicted Sales: $result SAR / Month",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        context.localeString("predicted_sales_label").replaceAll("{amount}", result!),
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        "💰 Revenue Estimate: $revenue SAR / Month",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        context.localeString("revenue_estimate_label").replaceAll("{amount}", revenue!),
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "👥 Customer Acquisition Estimate: $customerAcquisition customers / Month",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        context.localeString("customer_acquisition_estimate_label").replaceAll("{amount}", customerAcquisition!),
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "📊 ROI (Return on Investment): $roi%",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        context.localeString("roi_label").replaceAll("{amount}", roi!),
+                        style: const TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ],
                   ),
@@ -210,62 +170,6 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildNumberField(String label, TextEditingController controller) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
-        style: const TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: AppColors.kSurfaceColor,
-          labelText: label,
-          labelStyle: const TextStyle(color: Colors.white),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-        ),
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) return 'Required';
-          if (double.tryParse(value.trim()) == null)
-            return 'Enter numbers only';
-          return null;
-        },
-      ),
-    );
-  }
-
-  Widget _buildDropdown(
-    String label,
-    List<String> items,
-    String? selectedValue,
-    void Function(String?) onChanged,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: DropdownButtonFormField<String>(
-        value: selectedValue,
-        dropdownColor: AppColors.kSurfaceColor,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: AppColors.kSurfaceColor,
-          labelText: label,
-          labelStyle: const TextStyle(color: Colors.white),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-        ),
-        items:
-            items.map((e) {
-              return DropdownMenuItem(
-                value: e,
-                child: Text(e, style: const TextStyle(color: Colors.white)),
-              );
-            }).toList(),
-        onChanged: onChanged,
-        validator: (value) => value == null ? 'Please select $label' : null,
       ),
     );
   }
@@ -279,7 +183,7 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
     final int price = int.parse(pricePointController.text);
     final int marketing = int.parse(marketingBudgetController.text);
     final int reach = int.parse(projectedReachController.text);
-    final double rate = double.parse(selectedConversionRate!) / 100;
+    final double rate = double.parse(selectedConversionRate!.replaceAll('%', '')) / 100;
 
     final body = {
       "Target Market Size": marketSize,
@@ -300,16 +204,11 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final double predictedSales = double.parse(
-          data["predicted_sales"].toString(),
-        );
+        final double predictedSales = double.parse(data["predicted_sales"].toString());
 
         final double calculatedCustomers = reach * (rate / 0.01);
         final double calculatedRevenue = calculatedCustomers * price;
-        final double calculatedROI =
-            marketing == 0
-                ? 0
-                : ((calculatedRevenue - marketing) / marketing) * 100;
+        final double calculatedROI = marketing == 0 ? 0 : ((calculatedRevenue - marketing) / marketing) * 100;
 
         final user = FirebaseAuth.instance.currentUser;
         final userEmail = user?.email ?? "unknown";
