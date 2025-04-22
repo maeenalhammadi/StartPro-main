@@ -6,6 +6,7 @@ import 'package:start_pro/features/home/view/screens/sales_prediction_screen.dar
 import 'package:start_pro/features/home/view/screens/name_generator_screen.dart';
 import 'package:start_pro/features/home/view/screens/saudi_regulations_screen.dart'; // 👈 Make sure this is imported
 import 'package:start_pro/features/home/view/screens/trend_analysis_screen.dart';
+
 class FeatureSection {
   final String label;
   final List<FeatureItem> items;
@@ -16,7 +17,7 @@ class FeatureSection {
 class HomeFeatures {
   static final List<FeatureSection> sections = [
     FeatureSection(
-      label: 'ai_tools',
+      label: 'business_profile',
       items: [
         FeatureItem(
           label: 'palette_generator',
@@ -41,13 +42,12 @@ class HomeFeatures {
     FeatureSection(
       label: 'business_tools',
       items: [
- FeatureItem(
-  label: 'trend_analysis',
-  icon: Icons.analytics_outlined,
-  description: 'analyze_business_trends_by_sector',
-  path: TrendAnalysisScreen.route,
-),
-
+        FeatureItem(
+          label: 'trend_analysis',
+          icon: Icons.analytics_outlined,
+          description: 'analyze_business_trends_by_sector',
+          path: TrendAnalysisScreen.route,
+        ),
 
         FeatureItem(
           label: 'sales_prediction',
