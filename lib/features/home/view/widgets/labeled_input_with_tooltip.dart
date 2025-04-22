@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+
+class LabeledInputWithTooltip extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  final String? tooltip;
+  final TextInputType keyboardType;
+
+  const LabeledInputWithTooltip({
+    super.key,
+    required this.controller,
+    required this.label,
+    this.tooltip,
+    this.keyboardType = TextInputType.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              if (tooltip != null) ...[
+                const SizedBox(width: 6),
+                Tooltip(
+                  message: tooltip!,
+                  child: Icon(Icons.info_outline, color: Colors.grey[400], size: 18),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 6),
+          TextFormField(
+            controller: controller,
+            keyboardType: keyboardType,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Color(0xFF1E1E2C),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) return 'Required';
+              if (double.tryParse(value.trim()) == null)
+                return 'Enter numbers only';
+              return null;
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:start_pro/core/theme/palette.dart';
+import '../widgets/labeled_input_with_tooltip.dart';
+import '../widgets/labeled_dropdown_with_tooltip.dart';
 
 class SalesPredictionScreen extends StatefulWidget {
   static const route = '/sales-prediction';
@@ -23,11 +25,10 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
       TextEditingController();
   final TextEditingController projectedReachController =
       TextEditingController();
-  final TextEditingController conversionRateController =
-      TextEditingController();
 
   String? selectedRegion;
   String? selectedIndustry;
+  String? selectedConversionRate;
   String? result;
   String? revenue;
   String? customerAcquisition;
@@ -63,6 +64,8 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
     "E-commerce & Retail",
   ];
 
+  final List<String> conversionRates = ["1", "2", "3", "4", "5"];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,31 +81,57 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              _buildNumberField(
-                "Target Market Size",
-                targetMarketSizeController,
+              LabeledInputWithTooltip(
+                controller: targetMarketSizeController,
+                label: 'Target Market Size',
+                tooltip:
+                    'Estimated number of people who could be interested in your product.',
+                keyboardType: TextInputType.number,
               ),
-              _buildDropdown("Saudi Region", regions, selectedRegion, (val) {
-                setState(() => selectedRegion = val);
-              }),
-              _buildDropdown("Industry/Sector", industries, selectedIndustry, (
-                val,
-              ) {
-                setState(() => selectedIndustry = val);
-              }),
-              _buildNumberField("Price Point (SAR)", pricePointController),
-              _buildNumberField(
-                "Marketing Budget (SAR)/month",
-                marketingBudgetController,
+              LabeledDropdownWithTooltip(
+                label: 'Saudi Region',
+                tooltip: 'Choose the region your business will target.',
+                items: regions,
+                selectedValue: selectedRegion,
+                onChanged: (val) => setState(() => selectedRegion = val),
               ),
-              _buildNumberField(
-                "Projected Customer Reach/month",
-                projectedReachController,
+              LabeledDropdownWithTooltip(
+                label: 'Industry/Sector',
+                tooltip: 'Select the field your business operates in.',
+                items: industries,
+                selectedValue: selectedIndustry,
+                onChanged: (val) => setState(() => selectedIndustry = val),
               ),
-              _buildNumberField(
-                "Estimated Conversion Rate (%)",
-                conversionRateController,
+              LabeledInputWithTooltip(
+                controller: pricePointController,
+                label: 'Price Point (SAR)',
+                tooltip: 'Price of one product or service unit.',
+                keyboardType: TextInputType.number,
               ),
+              LabeledInputWithTooltip(
+                controller: marketingBudgetController,
+                label: 'Marketing Budget (SAR)/month',
+                tooltip: 'How much you plan to spend on marketing each month.',
+                keyboardType: TextInputType.number,
+              ),
+              LabeledInputWithTooltip(
+                controller: projectedReachController,
+                label: 'Projected Customer Reach/month',
+                tooltip:
+                    'Estimated number of people your marketing could reach monthly.',
+                keyboardType: TextInputType.number,
+              ),
+
+              LabeledDropdownWithTooltip(
+                label: 'Estimated Conversion Rate (%)',
+                tooltip:
+                    'For new businesses, this rate is typically between 1% to 3%.',
+                items: conversionRates,
+                selectedValue: selectedConversionRate,
+                onChanged:
+                    (val) => setState(() => selectedConversionRate = val),
+              ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _predictSales,
@@ -122,24 +151,60 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
                   ),
                 ),
               ),
+
               if (result != null) ...[
                 const SizedBox(height: 24),
-                Text(
-                  "Predicted Sales: $result SAR / Month",
-                  style: const TextStyle(fontSize: 18, color: Colors.white),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  "Revenue Estimate: $revenue SAR / Month",
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
-                ),
-                Text(
-                  "Customer Acquisition Estimate: $customerAcquisition customers / Month",
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
-                ),
-                Text(
-                  "ROI (Return on Investment): $roi%",
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.kSurfaceColor.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.white24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 6,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "📈 Predicted Sales: $result SAR / Month",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        "💰 Revenue Estimate: $revenue SAR / Month",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        "👥 Customer Acquisition Estimate: $customerAcquisition customers / Month",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        "📊 ROI (Return on Investment): $roi%",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ],
@@ -193,14 +258,12 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         ),
         items:
-            items
-                .map(
-                  (e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e, style: const TextStyle(color: Colors.white)),
-                  ),
-                )
-                .toList(),
+            items.map((e) {
+              return DropdownMenuItem(
+                value: e,
+                child: Text(e, style: const TextStyle(color: Colors.white)),
+              );
+            }).toList(),
         onChanged: onChanged,
         validator: (value) => value == null ? 'Please select $label' : null,
       ),
@@ -216,7 +279,7 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
     final int price = int.parse(pricePointController.text);
     final int marketing = int.parse(marketingBudgetController.text);
     final int reach = int.parse(projectedReachController.text);
-    final double rate = double.parse(conversionRateController.text) / 100;
+    final double rate = double.parse(selectedConversionRate!) / 100;
 
     final body = {
       "Target Market Size": marketSize,
@@ -241,18 +304,17 @@ class _SalesPredictionScreenState extends State<SalesPredictionScreen> {
           data["predicted_sales"].toString(),
         );
 
-        final double calculatedRevenue = price * predictedSales;
-        final double calculatedCustomers = reach * rate;
-        final double profit = predictedSales - marketing;
+        final double calculatedCustomers = reach * (rate / 0.01);
+        final double calculatedRevenue = calculatedCustomers * price;
         final double calculatedROI =
-            marketing == 0 ? 0 : (profit / marketing) * 100;
+            marketing == 0
+                ? 0
+                : ((calculatedRevenue - marketing) / marketing) * 100;
 
-        // Get user info
         final user = FirebaseAuth.instance.currentUser;
         final userEmail = user?.email ?? "unknown";
         final userId = user?.uid ?? "unknown";
 
-        // Save to Firestore
         await FirebaseFirestore.instance.collection("sales_predictions").add({
           "userId": userId,
           "email": userEmail,
