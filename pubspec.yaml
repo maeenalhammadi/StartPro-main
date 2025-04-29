@@ -49,6 +49,8 @@ dependencies:
   fluttertoast: ^8.2.4
   http: ^1.3.0
   url_launcher:  ^6.1.7
+  syncfusion_flutter_pdfviewer: ^29.1.39
+
 
  
 
@@ -69,6 +71,9 @@ flutter:
     - assets/locales/
     - .env
     - assets/animations/
+    - assets/pdfs/
+
+    
 
 
 flutter_native_splash:

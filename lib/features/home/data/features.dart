@@ -6,6 +6,8 @@ import 'package:start_pro/features/home/view/screens/sales_prediction_screen.dar
 import 'package:start_pro/features/home/view/screens/name_generator_screen.dart';
 import 'package:start_pro/features/home/view/screens/saudi_regulations_screen.dart'; // 👈 Make sure this is imported
 import 'package:start_pro/features/home/view/screens/trend_analysis_screen.dart';
+import 'package:start_pro/features/home/view/screens/user_manual_screen.dart';
+
 
 class FeatureSection {
   final String label;
@@ -67,12 +69,12 @@ class HomeFeatures {
           path: SaudiRegulationsScreen.route, // ✅ updated to use static route
         ),
 
-        FeatureItem(
-          label: 'user_manual',
-          icon: Icons.menu_book_outlined,
-          description: 'download_comprehensive_guides',
-          path: '/user-manual',
-        ),
+       FeatureItem(
+      label: 'user_manual',
+      icon: Icons.menu_book_outlined,
+      description: 'download_comprehensive_guides',
+      path: UserManualScreen.route, // ✅ هنا الربط الصحيح
+    ),
       ],
     ),
   ];

@@ -22,4 +22,6 @@ class AppColors {
   static const Color kErrorColor = Color(0xFFF04564);
   static const Color kWarningColor = Color(0xFFFCC50F);
   static const Color kInfoColor = Color(0xFF2196F3);
+  static const Color kTextLightColor = Color(0xFF9E9E9E); // رمادي خفيف
+
 }

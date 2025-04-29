@@ -8,7 +8,9 @@ import 'package:start_pro/features/home/view/screens/logo_generator_screen.dart'
 import 'package:start_pro/features/home/view/screens/colors_screen.dart';
 import 'package:start_pro/features/home/view/screens/sales_prediction_screen.dart';
 import 'package:start_pro/features/home/view/screens/name_generator_screen.dart';
-import 'package:start_pro/features/home/view/screens/trend_analysis_screen.dart'; // ✅ Added
+import 'package:start_pro/features/home/view/screens/trend_analysis_screen.dart';
+import 'package:start_pro/features/home/view/screens/saudi_regulations_screen.dart';
+import 'package:start_pro/features/home/view/screens/user_manual_screen.dart'; // ✅ جديد
 
 Map<String, Widget Function(BuildContext)> routes = {
   RouterPage.route: (context) => const RouterPage(),
@@ -20,6 +22,7 @@ Map<String, Widget Function(BuildContext)> routes = {
   ColorsScreen.route: (context) => const ColorsScreen(),
   SalesPredictionScreen.route: (context) => SalesPredictionScreen(),
   NameGeneratorScreen.route: (context) => const NameGeneratorScreen(),
-  TrendAnalysisScreen.route:
-      (context) => const TrendAnalysisScreen(), // ✅ Route registered
+  TrendAnalysisScreen.route: (context) => const TrendAnalysisScreen(),
+  SaudiRegulationsScreen.route: (context) => const SaudiRegulationsScreen(),
+  UserManualScreen.route: (context) => const UserManualScreen(), // ✅ أضفنا هنا
 };

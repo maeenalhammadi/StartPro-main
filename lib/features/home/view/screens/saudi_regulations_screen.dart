@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
+import './pdf_viewer_screen.dart';
 
 class SaudiRegulationsScreen extends StatelessWidget {
   static const route = '/saudi-laws';
@@ -7,27 +9,100 @@ class SaudiRegulationsScreen extends StatelessWidget {
 
   final List<Map<String, String>> regulations = const [
     {
-      'title': 'Business Licenses',
-      'description':
-          'Learn how to apply for and renew business licenses in Saudi Arabia.',
+      'titleKey': 'accounting_title',
+      'descriptionKey': 'accounting_description',
+      'pdfPath': 'assets/pdfs/Accounting and Auditing Profession System.pdf',
     },
     {
-      'title': 'Zakat & Tax Rules',
-      'description':
-          'Understand Zakat regulations and tax obligations for startups.',
+      'titleKey': 'resident_title',
+      'descriptionKey': 'resident_description',
+      'pdfPath': 'assets/pdfs/Accredited Resident System.pdf',
     },
     {
-      'title': 'Commercial Laws',
-      'description': 'Explore key legal frameworks for commercial activities.',
+      'titleKey': 'fraud_title',
+      'descriptionKey': 'fraud_description',
+      'pdfPath': 'assets/pdfs/Anti-Commercial Fraud System.pdf',
     },
     {
-      'title': 'Labor & Employment',
-      'description':
-          'Know the rules about hiring, contracts, and worker rights.',
+      'titleKey': 'arbitration_title',
+      'descriptionKey': 'arbitration_description',
+      'pdfPath': 'assets/pdfs/Arbitration system.pdf',
     },
     {
-      'title': 'Investment Rules',
-      'description': 'Understand foreign and local investment regulations.',
+      'titleKey': 'chambers_title',
+      'descriptionKey': 'chambers_description',
+      'pdfPath': 'assets/pdfs/Chambers of Commerce System.pdf',
+    },
+    {
+      'titleKey': 'chemical_title',
+      'descriptionKey': 'chemical_description',
+      'pdfPath': 'assets/pdfs/Chemical Management System.pdf',
+    },
+    {
+      'titleKey': 'agency_title',
+      'descriptionKey': 'agency_description',
+      'pdfPath': 'assets/pdfs/Commercial Agency System.pdf',
+    },
+    {
+      'titleKey': 'data_title',
+      'descriptionKey': 'data_description',
+      'pdfPath': 'assets/pdfs/Commercial Data System.pdf',
+    },
+    {
+      'titleKey': 'ledger_title',
+      'descriptionKey': 'ledger_description',
+      'pdfPath': 'assets/pdfs/Commercial ledger system.pdf',
+    },
+    {
+      'titleKey': 'paper_title',
+      'descriptionKey': 'paper_description',
+      'pdfPath': 'assets/pdfs/Commercial paper system.pdf',
+    },
+    {
+      'titleKey': 'registry_title',
+      'descriptionKey': 'registry_description',
+      'pdfPath': 'assets/pdfs/Commercial Registry System.pdf',
+    },
+    {
+      'titleKey': 'companies_title',
+      'descriptionKey': 'companies_description',
+      'pdfPath': 'assets/pdfs/Companies system.pdf',
+    },
+    {
+      'titleKey': 'measurement_title',
+      'descriptionKey': 'measurement_description',
+      'pdfPath': 'assets/pdfs/Measurement and calibration system.pdf',
+    },
+    {
+      'titleKey': 'commerce_ministry_title',
+      'descriptionKey': 'commerce_ministry_description',
+      'pdfPath': 'assets/pdfs/Ministry of Commerce System.pdf',
+    },
+    {
+      'titleKey': 'standards_title',
+      'descriptionKey': 'standards_description',
+      'pdfPath':
+          'assets/pdfs/Organization of the Saudi Standards, Metrology and Quality.pdf',
+    },
+    {
+      'titleKey': 'labs_title',
+      'descriptionKey': 'labs_description',
+      'pdfPath': 'assets/pdfs/Private Laboratories System.pdf',
+    },
+    {
+      'titleKey': 'warehouse_title',
+      'descriptionKey': 'warehouse_description',
+      'pdfPath': 'assets/pdfs/Public warehouse deposit system.pdf',
+    },
+    {
+      'titleKey': 'engineers_title',
+      'descriptionKey': 'engineers_description',
+      'pdfPath': 'assets/pdfs/Saudi Council of Engineers System.pdf',
+    },
+    {
+      'titleKey': 'trade_names_title',
+      'descriptionKey': 'trade_names_description',
+      'pdfPath': 'assets/pdfs/Trade Names System.pdf',
     },
   ];
 
@@ -37,7 +112,7 @@ class SaudiRegulationsScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF0D3446),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1A4E5F),
-        title: const Text('Saudi Business Laws'),
+        title: LocaleText('saudi_business_laws'),
         centerTitle: true,
       ),
       body: Padding(
@@ -58,7 +133,7 @@ class SaudiRegulationsScreen extends StatelessWidget {
                   vertical: 12,
                 ),
                 title: Text(
-                  law['title']!,
+                  context.localeString(law['titleKey']!),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -66,7 +141,7 @@ class SaudiRegulationsScreen extends StatelessWidget {
                   ),
                 ),
                 subtitle: Text(
-                  law['description']!,
+                  context.localeString(law['descriptionKey']!),
                   style: const TextStyle(color: Colors.white70, fontSize: 14),
                 ),
                 trailing: const Icon(
@@ -75,7 +150,16 @@ class SaudiRegulationsScreen extends StatelessWidget {
                   size: 16,
                 ),
                 onTap: () {
-                  // TODO: Navigate to a web view or detail page in the future
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (_) => PdfViewerScreen(
+                            title: context.localeString(law['titleKey']!),
+                            pdfPath: law['pdfPath']!,
+                          ),
+                    ),
+                  );
                 },
               ),
             );
