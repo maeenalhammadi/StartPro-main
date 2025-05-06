@@ -11,6 +11,14 @@ import 'package:start_pro/features/home/view/screens/name_generator_screen.dart'
 import 'package:start_pro/features/home/view/screens/trend_analysis_screen.dart';
 import 'package:start_pro/features/home/view/screens/saudi_regulations_screen.dart';
 import 'package:start_pro/features/home/view/screens/user_manual_screen.dart'; // ✅ جديد
+import 'package:start_pro/features/home/view/screens/security_screen.dart';
+import 'package:start_pro/features/home/view/screens/change_password_screen.dart';
+import 'package:start_pro/features/home/view/screens/help_center_screen.dart';
+import 'package:start_pro/features/home/view/screens/delete_account_screen.dart';
+
+// ...
+
+
 
 Map<String, Widget Function(BuildContext)> routes = {
   RouterPage.route: (context) => const RouterPage(),
@@ -25,4 +33,8 @@ Map<String, Widget Function(BuildContext)> routes = {
   TrendAnalysisScreen.route: (context) => const TrendAnalysisScreen(),
   SaudiRegulationsScreen.route: (context) => const SaudiRegulationsScreen(),
   UserManualScreen.route: (context) => const UserManualScreen(), // ✅ أضفنا هنا
+  SecurityScreen.route: (context) => const SecurityScreen(),
+ChangePasswordScreen.route: (context) => ChangePasswordScreen(),
+HelpCenterScreen.route: (context) => const HelpCenterScreen(),
+DeleteAccountScreen.route: (context) => const DeleteAccountScreen(),
 };

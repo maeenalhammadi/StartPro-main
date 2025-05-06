@@ -6,6 +6,9 @@ import 'package:start_pro/core/theme/palette.dart';
 import 'package:start_pro/features/home/utils/logout.dart';
 import 'package:start_pro/features/home/utils/swap_language.dart';
 import 'package:start_pro/features/home/view/pages/edit_profile.dart';
+import 'package:start_pro/features/home/view/screens/delete_account_screen.dart';
+import 'package:start_pro/features/home/view/screens/help_center_screen.dart';
+import 'package:start_pro/features/home/view/screens/security_screen.dart';
 import 'package:start_pro/features/home/view/widgets/settings/settings_section.dart';
 import 'package:start_pro/features/home/view/widgets/settings/settings_tile.dart';
 import 'package:start_pro/features/home/view/widgets/settings/appearance_buttons.dart';
@@ -30,13 +33,6 @@ class SettingsScreen extends ConsumerWidget {
                 onTap:
                     () => Navigator.pushNamed(context, EditProfilePage.route),
               ),
-              SettingsTile(
-                leading: const Icon(Icons.image_outlined),
-                title: Text(Locales.string(context, 'change_avatar')),
-                onTap: () {
-                  // Navigate to avatar change screen
-                },
-              ),
             ],
           ),
           SettingsSection(
@@ -59,21 +55,7 @@ class SettingsScreen extends ConsumerWidget {
                   Locales.string(context, 'password_and_security'),
                 ),
                 onTap: () {
-                  // Navigate to security settings
-                },
-              ),
-              SettingsTile(
-                leading: const Icon(Icons.notifications_outlined),
-                title: Text(Locales.string(context, 'notifications')),
-                onTap: () {
-                  // Navigate to notifications settings
-                },
-              ),
-              SettingsTile(
-                leading: const Icon(Icons.privacy_tip_outlined),
-                title: Text(Locales.string(context, 'privacy')),
-                onTap: () {
-                  // Navigate to privacy settings
+                  Navigator.pushNamed(context, SecurityScreen.route);
                 },
               ),
             ],
@@ -85,14 +67,7 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.help_outline),
                 title: Text(Locales.string(context, 'help_center')),
                 onTap: () {
-                  // Navigate to help center
-                },
-              ),
-              SettingsTile(
-                leading: const Icon(Icons.bug_report_outlined),
-                title: Text(Locales.string(context, 'report_bug')),
-                onTap: () {
-                  // Navigate to bug report
+                  Navigator.pushNamed(context, HelpCenterScreen.route);
                 },
               ),
             ],
@@ -121,7 +96,7 @@ class SettingsScreen extends ConsumerWidget {
                   style: TextStyle(color: AppColors.kErrorColor),
                 ),
                 onTap: () {
-                  _showDeleteAccountDialog(context);
+                  Navigator.pushNamed(context, DeleteAccountScreen.route);
                 },
               ),
             ],
